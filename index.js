@@ -63,6 +63,13 @@ async function run() {
       }
     });
 
+    //add Company info in db
+    app.post("/add-company", async (req, res) => {
+      const companyData = req.body;
+      const result = await companyCollection.insertOne(companyData);
+      res.send(result);
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
