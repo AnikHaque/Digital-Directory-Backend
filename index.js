@@ -19,3 +19,31 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
+
+async function run() {
+  try {
+    const companyCollection = client
+      .db("digitalDirectory")
+      .collection("companyData");
+
+    app.get("/company", async (req, res) => {
+      const cursor = companyCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+  } finally {
+  }
+}
+run().catch(console.dir);
+
+app.get("/", (req, res) => {
+  res.send("Digital Directory is running");
+});
+
+app.listen(port, () => {
+  console.log(`Digital Directory is running on port: ${port}`);
+});
