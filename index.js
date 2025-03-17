@@ -40,6 +40,29 @@ async function run() {
       res.send(result);
     });
 
+    //  get all products  filtering, sorting and pagination
+    app.get("/category-filter", async (req, res) => {
+      const { filter: alphabet, brand: category } = req.query;
+      const query = {};
+
+      if (alphabet) {
+        query.company_name = { $regex: `^${alphabet}`, $options: "i" };
+      }
+
+      if (category) {
+        query.category = category;
+      }
+
+      console.log("Query:", query);
+
+      try {
+        const companies = await companyCollection.find(query).toArray();
+        res.status(200).json(companies);
+      } catch (error) {
+        res.status(500).json({ message: "Error fetching companies", error });
+      }
+    });
+
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
